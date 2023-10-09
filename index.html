@@ -1,0 +1,139 @@
+<!--*******************************************************************************************
+ #
+ #  File Name:  microbialDiversityIndex.html
+ #
+ #  File Description:
+ #      This html file, microbialDiversityIndex.htmly, contains the html code
+ #      for the Microbial Diversity Dashboard.
+ #
+ #
+ #  Date            Description                             Programmer
+ #  ----------      ------------------------------------    ------------------
+ #  10/06/2023      Initial Development                     N James George
+ #
+ #******************************************************************************************-->
+
+<!DOCTYPE html>
+<html lang = 'en'>
+
+<head>
+
+  <meta charset = 'UTF-8'>
+  <meta name = 'viewport' content = 'width = device-width, initial-scale = 1.0'>
+  <meta http-equiv = 'X-UA-Compatible' content = 'ie=edge'>
+  
+  <title>
+    Bellybutton Biodiversity
+  </title>
+  
+  <link rel = 'stylesheet' href = 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'>
+  
+  <style>
+
+    .jumbotron {background: none;}
+  
+    .card-header {background-color: #2d10e6; font-weight: bold;}
+  
+  </style>
+
+</head>
+
+<body>
+
+  <div class = 'container'>
+
+    <div class = 'row'
+      
+      style = "background:transparent url('./static/js/microbialDiversityCultures.jpg') no-repeat center center /cover">
+      
+      <div class = 'col-md-12 jumbotron text-center'>
+      
+        <h1><b>
+          Microbial Diversity Dashboard
+        </b></h1>
+   
+        <h5>
+          Use the interactive charts below to explore the Belly Button Biodiversity Data Set.
+        </h5>
+   
+        <a class = 'btn btn-success btn' role = 'button' href = 'http://robdunnlab.com/projects/belly-button-biodiversity/' target = '_blank'>
+          Learn more about this project
+        </a>
+      
+      </div>
+
+    </div>
+
+    <div class = 'row'>
+    
+      <div class = 'col-md-2'>
+    
+        <div class = 'card mb-4'>
+    
+          <div class = 'card-header text-center header-font text-light display-6'>
+            Test Subject ID:
+          </div>
+    
+          <div class = 'card-body p-2 text-center bg-light'>
+    
+            <select id = 'selectDataset' onchange = 'OptionsChangeFunction (this.value)'>
+            </select>
+    
+          </div>
+    
+        </div>
+    
+        <div class = 'card'>
+    
+          <div class = 'card-header text-center header-font text-light'>
+            Test Subject Details:
+          </div>
+    
+          <div class = 'card-body p-2 bg-light' id = 'metadata-sample'>
+          </div>
+     
+        </div>
+    
+      </div>
+    
+      <div class = 'col-md-5'>
+    
+        <div id = 'bar'>
+        </div>
+    
+      </div>
+    
+      <div class = 'col-md-5'>
+    
+        <div id = 'gauge'>
+        </div>  
+    
+      </div>
+    
+    </div>
+    
+    <div class = 'row'>
+    
+      <div class = 'col-md-12'>
+    
+        <div id = 'bubble'>
+        </div>
+    
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src = 'https://d3js.org/d3.v5.min.js'>
+  </script>
+  
+  <script src = 'https://cdn.plot.ly/plotly-latest.min.js'>
+  </script>
+  
+  <script src = './static/js/microbialDiversityApp.js'>
+  </script>
+  
+</body>
+
+</html>
