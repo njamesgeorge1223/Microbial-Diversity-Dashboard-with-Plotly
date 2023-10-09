@@ -274,6 +274,8 @@ function GenerateBarChartFunction
             = {
                 title: '<b>Top 10 OTUs</b>',
                 titlefont: {size: 28},
+                width: 465, 
+                height: 450, 
                 font: {color: 'black', 
                        family: 'Garamond'},
                 xaxis: {title: 'Sample Count', 
