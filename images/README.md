@@ -1,4 +1,4 @@
-This folder contains the images of the displayed HTML file, microbialDiversityIndex.html, for every sample in the Belly Button Biodiversity Data Set.
+This folder contains the images of the displayed HTML file, index.html, for every sample in the Belly Button Biodiversity Data Set.
 
 ----
 
