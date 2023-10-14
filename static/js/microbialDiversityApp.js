@@ -13,7 +13,7 @@
  *
  ****************************************************************************/
 
-// This global variable contains the belly button biodiversity data set as
+// This global variable contains the Belly Button Biodiversity data set as
 // a List of JSON Dictionaries
 let samplesDataGlobalJsonDictionaryList = null
 
@@ -167,8 +167,8 @@ function OptionsChangeFunction
             (currentIDString) 
 { 
 
-    console.log
-        (currentIDString)
+    // console.log
+    //    (currentIDString)
 
 
     GenerateBarChartFunction
@@ -230,18 +230,18 @@ function GenerateBarChartFunction
         =  chartDataObject.otu_labels;
  
 
-    let top10ValuesDataObject 
+    let top10SampleValuesDataObject 
         = sample_values
             .slice (0, 10)
             .reverse ();
 
-    let top10IDsDataObject 
+    let top10OTUIDsDataObject 
         = otu_ids
             .slice (0, 10)
             .map (currentID => `OTU ${currentID}`)
             .reverse ();
 
-    let top10LabelsDataObject 
+    let top10OTULabelsDataObject 
         = otu_labels
             .slice (0, 10)
             .reverse ();
@@ -259,11 +259,11 @@ function GenerateBarChartFunction
 
     let barChartTraceDictionaryList
         = [{
-                text: top10LabelsDataObject,
+                text: top10OTULabelsDataObject,
                 type: 'bar',
                 orientation: 'h',
-                x: top10ValuesDataObject,
-                y: top10IDsDataObject,
+                x: top10SampleValuesDataObject,
+                y: top10OTUIDsDataObject,
                 marker: 
                     {color: 'aqua',
                      line: {color: 'black',
@@ -272,17 +272,17 @@ function GenerateBarChartFunction
 
     let barChartLayoutDictionary 
             = {
-                title: '<b>Top 10 OTUs</b>',
-                titlefont: {size: 28},
-                width: 465, 
-                height: 450, 
-                font: {color: 'black', 
-                       family: 'Garamond'},
-                xaxis: {title: 'Sample Count', 
-                        titlefont: {size: 20}},
-                yaxis: {title: 'OTU ID', 
-                        titlefont: {size: 20}},
-                paper_bgcolor: 'lavender'
+                    title: '<b>Top 10 OTUs</b>',
+                    titlefont: {size: 28},
+                    width: 465, 
+                    height: 450, 
+                    font: {color: 'black', 
+                           family: 'Garamond'},
+                    xaxis: {title: 'Sample Count', 
+                            titlefont: {size: 20}},
+                    yaxis: {title: 'OTU ID', 
+                            titlefont: {size: 20}},
+                    paper_bgcolor: 'lavender'
               };
 
 
@@ -336,13 +336,13 @@ function GenerateBubbleChartFunction
                 (results => results.id == currentIDString) [0];
 
     let sample_values 
-        =  chartDataObject.sample_values;
+        = chartDataObject.sample_values;
   
     let otu_ids 
-        =  chartDataObject.otu_ids;
+        = chartDataObject.otu_ids;
                   
     let otu_labels 
-        =  chartDataObject.otu_labels;
+        = chartDataObject.otu_labels;
 
 
     //console.log
@@ -432,9 +432,9 @@ function GenerateMetadataFunction
 
 
     d3.select
-        ('#metadata-sample')
+            ('#metadata-sample')
       .html
-        ('');
+            ('');
 
 
     Object
@@ -453,7 +453,7 @@ function GenerateMetadataFunction
                             else if (valueObject.includes('DurhamNC') === true)
                             {
                                 valueFinalObject = 'Durham, NC'
-                             }
+                            }
                             else if (valueObject.includes('St.Louis') === true)
                             {
                                 valueFinalObject = 'St.Louis, MO'
@@ -467,7 +467,7 @@ function GenerateMetadataFunction
                                 valueFinalObject = valueObject.replace('/', ', ')
                             }
                             else if (valueObject.includes(',') === true 
-                                     && valueObject.includes(', ') == false) 
+                                     && valueObject.includes(', ') === false) 
                             {
                                 valueFinalObject = valueObject.replace(',', ', ')
                             }
@@ -490,11 +490,11 @@ function GenerateMetadataFunction
                 
 
                         d3.select
-                            ('#metadata-sample')
+                                ('#metadata-sample')
                           .append
-                            ('h6')
+                                ('h6')
                           .text
-                            (`${keyObject.toUpperCase()}: ${valueFinalObject}`);
+                                (`${keyObject.toUpperCase()}: ${valueFinalObject}`);
                     }
             );
 
