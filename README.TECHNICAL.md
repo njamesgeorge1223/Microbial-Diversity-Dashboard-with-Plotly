@@ -418,7 +418,7 @@ HTML, Javascript, Plotly, Visual Studio Code
 
 ----
 
-### **Authors and Acknowledgment:**
+### **Authors and Acknowledgments:**
 
 I want to thank Margaret Thorpe: the visual elements of her webpage for this assignment was an inspiration for my own. (https://github.com/MThorpester/biodiversity-challenge.git)
 
