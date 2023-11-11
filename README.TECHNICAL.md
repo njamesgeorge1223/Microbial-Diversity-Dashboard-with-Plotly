@@ -6,7 +6,7 @@
 
 ----
 
-The HTML file, microbialDiversityIndex.html, requires a working browser (i.e., Chrome, Safari, etc.) to execute.
+The HTML file, index.html, requires a working browser (i.e., Chrome, Safari, etc.) to execute.
 
 ----
 
@@ -14,7 +14,7 @@ The HTML file, microbialDiversityIndex.html, requires a working browser (i.e., C
 
 ----
 
-The HTML file, microbialDiversityIndex.html, uses the Javascript file, microbialDiversityApp.js, and the jpeg image, microbialDiversityCultures.jpg, both found in the ./static/js folder.
+The HTML file, index.html, uses the Javascript file, microbialDiversityApp.js, the css file, microbialDiversityDashboardStyle.css, and the jpeg image, microbialDiversityCultures.jpg, all found in subfolders within the folder, /static.
 
 ----
 
@@ -24,7 +24,7 @@ The HTML file, microbialDiversityIndex.html, uses the Javascript file, microbial
 
 #### Source code
 
-microbialDiversityIndex.html, microbialDiversityApp.js
+index.html, microbialDiversityDashboardStyle.css, microbialDiversityApp.js
 
 #### Input files
 
@@ -52,7 +52,7 @@ HTML, Javascript, Plotly, Visual Studio Code
 
 #### main branch 
 
-|&rarr; [./microbialDiversityIndex.html](./microbialDiversityIndex.html)
+|&rarr; [./index.html](./index.html)
 
 |&rarr; [./README.TECHNICAL.md](./README.TECHNICAL.md)
 
@@ -388,11 +388,21 @@ HTML, Javascript, Plotly, Visual Studio Code
   
   &emsp; |&rarr; [./images/README.md](./images/README.md)
 
+|&rarr; [./static/css/](./static/css/)
+
+  &emsp; |&rarr; [./static/css/microbialDiversityDashboardStyle.css](./static/css/microbialDiversityDashboardStyle.css)
+
+  &emsp; |&rarr; [./static/css/README.md](./static/css/README.md)
+
+|&rarr; [./static/img/](./static/img/)
+
+  &emsp; |&rarr; [./static/img/microbialDiversityCultures.jpg](./static/img/microbialDiversityCultures.jpg)
+
+  &emsp; |&rarr; [./static/img/README.md](./static/img/README.md)
+
 |&rarr; [./static/js/](./static/js/)
 
   &emsp; |&rarr; [./static/js/microbialDiversityApp.js](./PyBank/Analysis/microbialDiversityApp.js)
-
-  &emsp; |&rarr; [./static/js/microbialDiversityCultures.jpg](./PyBank/Analysis/microbialDiversityCultures.jpg)
 
   &emsp; |&rarr; [./static/js/README.md](./static/js/README.md)
   
