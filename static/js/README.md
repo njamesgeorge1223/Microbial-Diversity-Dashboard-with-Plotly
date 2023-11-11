@@ -1,4 +1,4 @@
-The folder has the Javascript file and JPEG file required for the HTML file, index.html.
+The folder has the Javascript file required for the HTML file, index.html.
 
 ----
 
