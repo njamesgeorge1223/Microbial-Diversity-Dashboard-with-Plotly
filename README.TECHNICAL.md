@@ -436,4 +436,4 @@ I want to thank Margaret Thorpe: the visual elements of her webpage for this ass
 
 ### **Copyright**
 
-N. James George, Stephen Smith © 2023. All Rights Reserved.
+N. James George © 2023. All Rights Reserved.
