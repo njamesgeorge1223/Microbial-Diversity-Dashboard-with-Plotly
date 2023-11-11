@@ -3,19 +3,29 @@
  *  File Name:  microbialDiversityApp.js
  *
  *  File Description:
- *      This Javascript file contains the function calls for the html file,
- *      microbialDiversityIndex.html.
- *
+ *      This Javascript file contains the function and subroutine calls for 
+ *      the html file, index.html. Here is a list of the functions and
+ *      subroutines.
+ * 
+ *      FetchJsonDataFromURLFunction
+ *      OptionsChangeSubroutine
+ *      GenerateMetadataSubroutine
+ *      GenerateGaugeChartSubroutine
+ *      GenerateBarChartSubroutine
+ *      GenerateBubbleChartSubroutine
+ *      InitializeWebPageSubroutine
+ *      
  *
  *  Date        Description                             Programmer
  *  ----------  ------------------------------------    ------------------
  *  10/06/2023  Initial Development                     N. James George
+ *  11/10/2023 Upgraded code with new features          N. James George
  *
  ****************************************************************************/
 
-// This global variable contains the Belly Button Biodiversity data set as
-// a List of JSON Dictionaries
-let samplesDataGlobalJsonDictionaryList = null
+const 
+    urlString
+        = 'https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json';
 
 
 /****************************************************************************
@@ -23,63 +33,533 @@ let samplesDataGlobalJsonDictionaryList = null
  *  Function Name:  FetchJsonDataFromURLFunction
  *
  *  Function Description:  
- *      This function retrieves the belly button biodiversity data set 
- *      from the specified URL.
+ *      This function is the first stage for retrieving the aviation 
+ *      accidents data set from the specified URL.
  *
  *
  *  Function Parameters:
  *
  *  Type    Name            Description
  *  -----   -------------   ----------------------------------------------
- *  n/a     n/a             n/a
+ *  String
+ *          jsonUrlString
+ *                          This parameter is the URL for the source data.
  *
  * 
  *  Date        Description                             Programmer
  *  --------    ------------------------------------    ------------------
- *  10/06/23    Initial Development                     N. James George
+ *  10/06/2023  Initial Development                     N. James George
  *
  ****************************************************************************/
 
-async function FetchJsonDataFromURLFunction () 
+async function FetchJsonDataFromURLFunction 
+                (jsonUrlString) 
 {
-    
-    const jsonDataURLString 
-            = 'https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/'
-              + 'v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json';
-
     let dataD3JsonObject = null;
   
-
     try 
     {
         dataD3JsonObject 
             = await 
-                d3.json
-                    (jsonDataURLString)
+                d3.json(jsonUrlString);
     }
-    catch (errorObject) 
+    catch (error) 
     {
-        console.error
-            (errorObject)
+        console.error(error);
     }
  
-  
     return dataD3JsonObject;
- 
-} // This right brace ends the block for the function, FetchJsonDataFromURLFunction.
+} // This right brace ends the block for the function, 
+// FetchJsonDataFromURLFunction.
 
 
 /****************************************************************************
  *
- *  Function Name:  InitializeWebPageFunction
+ *  Subroutine Name:  OptionsChangeSubroutine
  *
- *  Function Description:  
- *      This function initializes the Microbial Diversity Dashboard 
+ *  Subroutine Description:  
+ *      This subroutine updates the metadata and charts with the current
+ *      sample's data.
+ *
+ *
+ *  Subroutine Parameters:
+ *
+ *  Type    Name            Description
+ *  -----   -------------   ----------------------------------------------
+ *  String
+ *          currentSampleNameString
+ *                          This parameter is the name of the current sample.
+ *
+ * 
+ *  Date        Description                             Programmer
+ *  --------    ------------------------------------    ------------------
+ *  10/06/23    Initial Development                     N. James George
+ *
+ ****************************************************************************/
+
+function OptionsChangeSubroutine
+            (currentSampleNameString) 
+{ 
+    GenerateMetadataSubroutine
+      (currentSampleNameString);
+
+    GenerateGaugeChartSubroutine
+      (currentSampleNameString);
+
+    GenerateBarChartSubroutine
+      (currentSampleNameString);
+
+    GenerateBubbleChartSubroutine
+       (currentSampleNameString);
+}; // This right brace ends the block for the subroutine, 
+// OptionsChangeSubroutine.
+
+
+/****************************************************************************
+ *
+ *  Subroutine Name:   GenerateMetadataSubroutine
+ *
+ *  Subroutine Description:  
+ *      This subroutine generates the Dashboard's metadata information
+ *      for the current sample.
+ *
+ *
+ *  Function Parameters:
+ *
+ *  Type    Name            Description
+ *  -----   -------------   ----------------------------------------------
+ *  String
+ *          currentSampleNameString
+ *                          This parameter is the name of the current sample.
+ *
+ * 
+ *  Date        Description                             Programmer
+ *  --------    ------------------------------------    ------------------
+ *  10/06/23    Initial Development                     N. James George
+ *
+ ****************************************************************************/
+
+function GenerateMetadataSubroutine
+            (currentSampleNameString) 
+{
+    FetchJsonDataFromURLFunction (urlString)
+        .then
+            (microbialDataDictionary => 
+                {
+                    var currentMetadataDictionary 
+                            = microbialDataDictionary
+                                .metadata
+                                .filter
+                                    (metadataKey => 
+                                        metadataKey.id == currentSampleNameString)[0];
+ 
+                    var currentMetadataD3Object 
+                            = d3.select('#metadataSample');
+
+                    currentMetadataD3Object.html('');
+
+                    Object
+                        .entries
+                            (currentMetadataDictionary)
+                        .forEach
+                        (
+                            ([key, value]) => 
+                                {
+                                    var valueFinalString;
+                                    
+                                    if (typeof value === 'string') 
+                                    {
+                                        if (value.includes('Caucasian/Midleastern') === true)
+                                        {
+                                            valueFinalString = 'Caucasian, Middle Eastern'; 
+                                        }
+                                        else if (value.includes('WashingtonDC') === true)
+                                        {
+                                            valueFinalString = 'Washington, DC'; 
+                                        }
+                                        else if (value.includes('DurhamNC') === true)
+                                        {
+                                            valueFinalString = 'Durham, NC';
+                                        }
+                                        else if (value.includes('St.Louis') === true)
+                                        {
+                                            valueFinalString = 'St.Louis, MO';
+                                        }
+                                        else if (value.includes('London') === true)
+                                        {
+                                            valueFinalString = 'London, UK';
+                                        }
+                                        else if (value.includes ('/') === true) 
+                                        {
+                                            valueFinalString = value.replace('/', ', ');
+                                        }
+                                        else if (value.includes(',') === true 
+                                                    && value.includes(', ') === false) 
+                                        {
+                                            valueFinalString = value.replace(',', ', ');
+                                        }
+                                        else if (value.includes('Unknown') === true)
+                                        {
+                                            valueFinalString = value.toLowerCase();
+                                        }
+                                        else if (value === 'm' || value === 'f')
+                                        {
+                                            valueFinalString = value.toUpperCase();
+                                        }
+                                        else 
+                                        {
+                                            valueFinalString = value;
+                                        }
+                                    }
+                                    else if (value === null)
+                                    {
+                                        valueFinalString = 'unknown';
+                                    }
+                                    else 
+                                    {
+                                        valueFinalString = value;
+                                    }
+                                    
+                                    currentMetadataD3Object
+                                        .append('h6')
+                                        .text(`${key.toUpperCase()}: ${valueFinalString}`);
+                    }
+                );
+            }
+        );
+}; // This right brace ends the block for the subroutine, 
+// GenerateMetadataSubroutine.
+
+
+/****************************************************************************
+ *
+ *  Subroutine Name:   GenerateGaugeChartSubroutine
+ *
+ *  Subroutine Description:  
+ *      This subroutine generates the Dashboard's gauge chart
+ *      for the current sample.
+ *
+ *
+ *  Subroutine Parameters:
+ *
+ *  Type    Name            Description
+ *  -----   -------------   ----------------------------------------------
+ *  String
+ *          currentSampleNameString
+ *                          This parameter is the name of the current sample.
+ *
+ * 
+ *  Date        Description                             Programmer
+ *  --------    ------------------------------------    ------------------
+ *  10/06/23    Initial Development                     N. James George
+ *
+ ****************************************************************************/
+
+function GenerateGaugeChartSubroutine 
+            (currentSampleNameString) 
+{
+    FetchJsonDataFromURLFunction (urlString)
+        .then
+            (microbialDataDictionary => 
+                {
+                    var currentMetadataDictionary 
+                            = microbialDataDictionary
+                                .metadata
+                                .filter
+                                    (metadataKey => 
+                                        metadataKey.id == currentSampleNameString)[0];
+
+                    var washingFrequencyInteger
+                            = currentMetadataDictionary.wfreq
+
+                    var gaugeChartTraceDictionaryList
+                            = [
+                                {
+                                    title: {text: '<b>Belly Button Washing Frequency</b>' 
+                                                  + '<br> Scrubs Per Week',
+                                            font: {size: 18}},
+                                    mode: 'gauge+number',
+                                    type: 'indicator',
+                                    value: washingFrequencyInteger,
+                                    domain: {x: [0, 1], y: [0, 1]},
+                                    gauge: {axis: {range: [null, 9], 
+                                                   tickwidth: 2.0, 
+                                                   tickcolor: 'black'},
+                                            bar: {color: 'blue'},
+                                            bgcolor: 'white',
+                                            borderwidth: 1.0,
+                                            bordercolor: 'black',
+                                            steps: [{range: [0, 2], color: '208b3a'},
+                                                    {range: [2, 4], color: '99ca3c'},
+                                                    {range: [4, 5], color: 'cbdb47'},
+                                                    {range: [5, 6], color: 'fcec52'},
+                                                    {range: [6, 7], color: 'fbb040'},
+                                                    {range: [7, 8], color: 'f78e31'},
+                                                    {range: [8, 9], color: 'f26b21'}],
+                                            threshold: {line: {color: 'indigo', 
+                                                               width: 4.0},
+                                                        thickness: 1.0,
+                                                        value: 9}}
+                                }
+                              ];
+                    
+                    var gaugeChartLayoutDictionary  
+                            = {width: 350, 
+                               height: 400, 
+                               font: {color: 'black', 
+                                      family: 'Garamond', 
+                                      size: 20.0}};
+
+                    Plotly
+                        .newPlot
+                            ('gaugeChart', 
+                             gaugeChartTraceDictionaryList, 
+                             gaugeChartLayoutDictionary);
+                }
+            );
+} // This right brace ends the block for the subroutine, 
+// GenerateGaugeChartSubroutine.
+
+
+/****************************************************************************
+ *
+ *  Subroutine Name:   GenerateBarChartSubroutine
+ *
+ *  Subroutine Description:  
+ *      This subroutine generates the Dashboard's bar chart for the current
+ *      sample.
+ *
+ *
+ *  Subroutine Parameters:
+ *
+ *  Type    Name            Description
+ *  -----   -------------   ----------------------------------------------
+ *  String
+ *          currentSampleNameString
+ *                          This parameter is the name of the current sample.
+ *
+ * 
+ *  Date        Description                             Programmer
+ *  --------    ------------------------------------    ------------------
+ *  10/06/23    Initial Development                     N. James George
+ *
+ ****************************************************************************/
+
+function GenerateBarChartSubroutine
+            (currentSampleNameString) 
+{
+    FetchJsonDataFromURLFunction (urlString)
+        .then
+            (microbialDataDictionary => 
+                {
+                    var currentSampleDictionary 
+                            = microbialDataDictionary
+                                .samples
+                                .filter
+                                    (sampleKey => 
+                                        sampleKey.id == currentSampleNameString)[0];
+
+                    var top10SampleValuesArray
+                            = currentSampleDictionary
+                                .sample_values
+                                    .slice (0, 10)
+                                    .reverse ();
+
+                    var top10OTUIDsArray
+                            = currentSampleDictionary 
+                                .otu_ids
+                                    .slice (0, 10)
+                                    .map (sampleNameString => `OTU ${sampleNameString}`)
+                                    .reverse ();
+
+                    var top10OTULabelsArray
+                            = currentSampleDictionary
+                                .otu_labels
+                                    .slice (0, 10)
+                                    .reverse ();
+
+                    var barChartTraceDictionaryList
+                        = [{
+                                x: top10SampleValuesArray,
+                                y: top10OTUIDsArray,
+                                text: top10OTULabelsArray,
+                                hoverlabel: 
+                                    {font: 
+                                        {color: 'black', 
+                                         family: 'garamond',
+                                         size: 12},
+                                         bgcolor: 'white',
+                                         bordercolor: 'brown'},
+                                hovermode: 'closest',
+                                hovertemplate:
+                                    '<b>%{yaxis.title.text}:</b> %{y}<br>'
+                                    + '<b>%{xaxis.title.text}:</b> %{x}<br>'
+                                    + '<b>Bacteria:</b> %{text}'
+                                    + '<extra></extra>',
+                                marker: 
+                                    {color: 'firebrick',
+                                     opacity: 0.7,
+                                     line: {color: 'black',
+                                            width: 1.0}},
+                                type: 'bar',
+                                orientation: 'h'
+                            }];
+                    
+                    var barChartLayoutDictionary 
+                            = {
+                                title: 
+                                    {text: '<b>Top 10 Operational Taxonomic Units (OTUs)</b>',
+                                     font: 
+                                        {color: 'black', 
+                                         family: 'georgia', 
+                                         size: 18}},
+                                xaxis: 
+                                    {title:
+                                        {text: 'Sample Values', 
+                                         font: 
+                                            {size: 14, 
+                                             color: 'black', 
+                                             family: 'georgia'}},
+                                     tickcolor: 'black',
+                                     tickfont: 
+                                        {family: 'georgia', 
+                                         color: 'black'},
+                                     tickwidth: 10},
+                                yaxis: 
+                                    {automargin: true,
+                                     title: 
+                                        {text: 'Operational Taxonomic Units (OTUs)',
+                                         font: 
+                                            {size: 14, 
+                                             color: 'black', 
+                                             family: 'georgia'}},
+                                     tickcolor: 'black',
+                                     tickfont: 
+                                        {family: 'georgia', 
+                                         color: 'black'},
+                                     tickwidth: 20},
+                                height: 400,
+                                width: 400,
+                                margin: 
+                                    {l: 100, 
+                                     r: 100, 
+                                     t: 100, 
+                                     b: 100}
+                              };
+                    
+                    Plotly
+                        .newPlot
+                            ('barChart', 
+                             barChartTraceDictionaryList,
+                             barChartLayoutDictionary)
+                }
+            );
+}; // This right brace ends the block for the subroutine, 
+// GenerateBarChartSubroutine.
+
+
+/****************************************************************************
+ *
+ *  Subroutine Name:   GenerateBubbleChartSubroutine
+ *
+ *  SubroutineDescription:  
+ *      This subroutine generates the Dashboard's bubble chart
+ *      for the current sample.
+ *
+ *
+ *  Subroutine Parameters:
+ *
+ *  Type    Name            Description
+ *  -----   -------------   ----------------------------------------------
+ *  String
+ *          currentSampleNameString
+ *                          This parameter is the name of the current sample.
+ *
+ * 
+ *  Date        Description                             Programmer
+ *  --------    ------------------------------------    ------------------
+ *  10/06/23    Initial Development                     N. James George
+ *
+ ****************************************************************************/
+
+function GenerateBubbleChartSubroutine 
+            (currentSampleNameString) 
+{
+    FetchJsonDataFromURLFunction (urlString)
+        .then
+            (microbialDataDictionary => 
+                {
+                    var currentSampleDictionary 
+                            = microbialDataDictionary
+                                .samples
+                                .filter
+                                    (sampleKey => 
+                                        sampleKey.id == currentSampleNameString)[0];
+
+                    var bubbleChartTraceDictionaryList
+                            = [{
+                                    x: currentSampleDictionary.otu_ids,
+                                    y: currentSampleDictionary.sample_values,
+                                    text: currentSampleDictionary.otu_labels,
+                                    hoverlabel: 
+                                        {font: 
+                                            {color: 'black', 
+                                             family: 'garamond',
+                                             size: 12},
+                                            bgcolor: 'white',
+                                            bordercolor: 'brown'},
+                                    hovermode: 'closest',
+                                    hovertemplate:
+                                        '<b>%{xaxis.title.text}:</b> %{x}<br>'
+                                        + '<b>%{yaxis.title.text}:</b> %{y}<br>' 
+                                        + '<b>Bacteria:</b> %{text}' 
+                                        + '<extra></extra>',
+                                    mode: 'markers',
+                                    marker: 
+                                        {color: currentSampleDictionary.otu_ids,
+                                         colorscale: 'Bluered',
+                                         size: currentSampleDictionary.sample_values,
+                                         opacity: 0.7}
+                                }];
+                                
+                    var bubbleChartLayoutDictionary 
+                            = {
+                                    title: '<b>Specimen Composition for Sample</b>',
+                                    titlefont: {size: 28},
+                                    font: {color: 'black', 
+                                           family: 'garamond'},
+                                    height: 1000,
+                                    width: 1140,
+                                    xaxis: {title: 'Operational Taxonomic Units (OTUs)', 
+                                            titlefont: {size: 20}},
+                                            yaxis: {title: 'Sample Values', 
+                                                    titlefont: {size: 20}},
+                                            hovermode: 'closest',
+                                            margin: {l: 100, r: 100, b: 100, t: 100}
+                              };
+                
+                    Plotly
+                        .newPlot
+                            ('bubbleChart', 
+                             bubbleChartTraceDictionaryList, 
+                             bubbleChartLayoutDictionary)
+            }
+        );
+}; // This right brace ends the block for the subroutine, 
+// GenerateBarChartSubroutine.
+
+
+/****************************************************************************
+ *
+ *  Subroutine Name:  InitializeWebPageSubroutine
+ *
+ *  Subroutine Description:  
+ *      This subroutine initializes the Microbial Diversity Dashboard 
  *      by populating the drop down menu and setting up the various 
  *      charts.
  *
  *
- *  Function Parameters:
+ *  Subroutine Parameters:
  *
  *  Type    Name            Description
  *  -----   -------------   ----------------------------------------------
@@ -92,516 +572,31 @@ async function FetchJsonDataFromURLFunction ()
  *
  ****************************************************************************/
 
-function InitializeWebPageFunction () 
+function InitializeWebPageSubroutine () 
 {
-
-    let dropdownMenuSelectionObject 
+    var dropdownMenuSelectionObject 
             = d3.select
                 ('#selectDataset');
 
-
-    FetchJsonDataFromURLFunction ()
+    FetchJsonDataFromURLFunction (urlString)
         .then
-            (
-                (resultsObject => 
-                    {
-                        samplesDataGlobalJsonDictionaryList
-                            = resultsObject;  
+            (microbialDataDictionary => 
+                microbialDataDictionary
+                    .names
+                    .forEach
+                        (nameString => 
+                            dropdownMenuSelectionObject
+                                .append('option')
+                                .text(nameString)
+                                .property('value'),
 
-                        resultsObject
-                            .names.forEach
-                                (
-                                    (currentIDString => 
-                                        {
-                                            dropdownMenuSelectionObject
-                                                .append ('option')
-                                                .text (currentIDString)
-                                                .property ('value', 
-                                                           currentIDString);
-                                        }
-                                    )
-                                );
-
-                                
-                        //console.log
-                        //    (resultsObject)
-
-
-                        let firstIDString 
-                                = resultsObject.names [0];
-            
-                        OptionsChangeFunction
-                            (firstIDString);
-                    }
-                )
+                            OptionsChangeSubroutine
+                                (microbialDataDictionary.names[0])
+                        )
             );
-
-}; // This right brace ends the block for the function, InitializeWebPageFunction.
-
-
-/****************************************************************************
- *
- *  Function Name:  OptionsChangeFunction
- *
- *  Function Description:  
- *      This function updates the metadata and charts with the current
- *      sample's data.
- *
- *
- *  Function Parameters:
- *
- *  Type    Name            Description
- *  -----   -------------   ----------------------------------------------
- *  String
- *          currentIDString
- *                          This parameter is the ID for the current sample.
- *
- * 
- *  Date        Description                             Programmer
- *  --------    ------------------------------------    ------------------
- *  10/06/23    Initial Development                     N. James George
- *
- ****************************************************************************/
-
-function OptionsChangeFunction
-            (currentIDString) 
-{ 
-
-    // console.log
-    //    (currentIDString)
-
-
-    GenerateBarChartFunction
-      (currentIDString);
-
-    GenerateBubbleChartFunction
-       (currentIDString);
-
-    GenerateMetadataFunction
-      (currentIDString);
-
-    GenerateGaugeChartFunction
-      (currentIDString);
-
-}; // This right brace ends the block for the function, optionsChangeFunction.
-
-
-/****************************************************************************
- *
- *  Function Name:   GenerateBarChartFunction
- *
- *  Function Description:  
- *      This function generates the Dashboard's bar chart
- *      for the current sample.
- *
- *
- *  Function Parameters:
- *
- *  Type    Name            Description
- *  -----   -------------   ----------------------------------------------
- *  String
- *          currentIDString
- *                          This parameter is the ID for the current sample.
- *
- * 
- *  Date        Description                             Programmer
- *  --------    ------------------------------------    ------------------
- *  10/06/23    Initial Development                     N. James George
- *
- ****************************************************************************/
-
-function GenerateBarChartFunction
-            (currentIDString) 
-{
-
-    let chartDataObject 
-            = samplesDataGlobalJsonDictionaryList
-                .samples
-                .filter
-                    (results => results.id == currentIDString) [0];
-
-    let sample_values 
-        =  chartDataObject.sample_values;
-  
-    let otu_ids 
-        =  chartDataObject.otu_ids;
-                  
-    let otu_labels 
-        =  chartDataObject.otu_labels;
- 
-
-    let top10SampleValuesDataObject 
-        = sample_values
-            .slice (0, 10)
-            .reverse ();
-
-    let top10OTUIDsDataObject 
-        = otu_ids
-            .slice (0, 10)
-            .map (currentID => `OTU ${currentID}`)
-            .reverse ();
-
-    let top10OTULabelsDataObject 
-        = otu_labels
-            .slice (0, 10)
-            .reverse ();
-                
-
-    //console.log
-    //    (sample_values)
-
-    //console.log
-    //    (otu_ids)
-
-    //console.log
-    //    (otu_labels)
-
-
-    let barChartTraceDictionaryList
-        = [{
-                text: top10OTULabelsDataObject,
-                type: 'bar',
-                orientation: 'h',
-                x: top10SampleValuesDataObject,
-                y: top10OTUIDsDataObject,
-                marker: 
-                    {color: 'aqua',
-                     line: {color: 'black',
-                            width: 1.0}}
-            }];
-
-    let barChartLayoutDictionary 
-            = {
-                    title: '<b>Top 10 OTUs</b>',
-                    titlefont: {size: 28},
-                    width: 465, 
-                    height: 450, 
-                    font: {color: 'black', 
-                           family: 'Garamond'},
-                    xaxis: {title: 'Sample Count', 
-                            titlefont: {size: 20}},
-                    yaxis: {title: 'OTU ID', 
-                            titlefont: {size: 20}},
-                    paper_bgcolor: 'lavender'
-              };
-
-
-    //console.log
-    //    (barChartTraceDictionaryList)
-        
-    //console.log
-    //    (barChartLayoutDictionary)
-
-
-    Plotly.newPlot
-        ('bar', 
-         barChartTraceDictionaryList,
-         barChartLayoutDictionary)
-
-}; // This right brace ends the block for the function, GenerateBarChartFunction.
-
-
-/****************************************************************************
- *
- *  Function Name:   GenerateBubbleChartFunction
- *
- *  Function Description:  
- *      This function generates the Dashboard's bubble chart
- *      for the current sample.
- *
- *
- *  Function Parameters:
- *
- *  Type    Name            Description
- *  -----   -------------   ----------------------------------------------
- *  String
- *          currentIDString
- *                          This parameter is the ID for the current sample.
- *
- * 
- *  Date        Description                             Programmer
- *  --------    ------------------------------------    ------------------
- *  10/06/23    Initial Development                     N. James George
- *
- ****************************************************************************/
-
-function GenerateBubbleChartFunction 
-            (currentIDString) 
-{
-
-    let chartDataObject 
-        = samplesDataGlobalJsonDictionaryList
-            .samples
-            .filter
-                (results => results.id == currentIDString) [0];
-
-    let sample_values 
-        = chartDataObject.sample_values;
-  
-    let otu_ids 
-        = chartDataObject.otu_ids;
-                  
-    let otu_labels 
-        = chartDataObject.otu_labels;
-
-
-    //console.log
-    //    (sample_values)
-
-    //console.log
-    //    (otu_ids)
-
-    //console.log
-    //    (otu_labels)
-
-
-    let bubbleChartTraceDictionaryList
-            = [{
-                    text: otu_labels,
-                    x: otu_ids,
-                    y: sample_values,
-                    mode: 'markers',
-                    marker: 
-                        {size: sample_values,
-                         color: otu_ids,
-                         colorscale: 'Bluered'}
-                }];
-
-    let bubbleChartLayoutDictionary 
-        = {
-                title: '<b>Sample Specimen Composition</b>',
-                titlefont: {size: 28},
-                font: {color: 'black', family: 'Garamond'},
-                xaxis: {title: 'OTU ID', 
-                        titlefont: {size: 20}},
-                yaxis: {title: 'Composition', 
-                        titlefont: {size: 20}},
-                hovermode: 'closest',
-                paper_bgcolor: 'lavender'
-          };
-
-
-    //console.log
-    //    (bubbleChartTraceDictionaryList)
-  
-    //console.log
-    //    (bubbleChartLayoutDictionary)
-
-
-    Plotly.newPlot
-        ('bubble', 
-         bubbleChartTraceDictionaryList, 
-         bubbleChartLayoutDictionary)
-
-}; // This right brace ends the block for the function, GenerateBarChartFunction.
-
-
-/****************************************************************************
- *
- *  Function Name:   GenerateMetadataFunction
- *
- *  Function Description:  
- *      This function generates the Dashboard's metadata information
- *      for the current sample.
- *
- *
- *  Function Parameters:
- *
- *  Type    Name            Description
- *  -----   -------------   ----------------------------------------------
- *  String
- *          currentIDString
- *                          This parameter is the ID for the current sample.
- *
- * 
- *  Date        Description                             Programmer
- *  --------    ------------------------------------    ------------------
- *  10/06/23    Initial Development                     N. James George
- *
- ****************************************************************************/
-
-function GenerateMetadataFunction
-            (currentIDString) 
-{
-
-    let metaDataObject
-            = samplesDataGlobalJsonDictionaryList
-                .metadata
-                .filter
-                    (results => results.id == currentIDString) [0];
-
-
-    d3.select
-            ('#metadata-sample')
-      .html
-            ('');
-
-
-    Object
-        .entries
-            (metaDataObject)
-        .forEach
-            (
-                ([keyObject, valueObject]) => 
-                    {
-                        if (typeof valueObject === 'string') 
-                        {
-                            if (valueObject.includes('WashingtonDC') === true)
-                            {
-                                valueFinalObject = 'Washington, DC'
-                            }
-                            else if (valueObject.includes('DurhamNC') === true)
-                            {
-                                valueFinalObject = 'Durham, NC'
-                            }
-                            else if (valueObject.includes('St.Louis') === true)
-                            {
-                                valueFinalObject = 'St.Louis, MO'
-                            }
-                            else if (valueObject.includes('London') === true)
-                            {
-                                valueFinalObject = 'London, UK'
-                            }
-                            else if (valueObject.includes ('/') === true) 
-                            {
-                                valueFinalObject = valueObject.replace('/', ', ')
-                            }
-                            else if (valueObject.includes(',') === true 
-                                     && valueObject.includes(', ') === false) 
-                            {
-                                valueFinalObject = valueObject.replace(',', ', ')
-                            }
-                            else 
-                            {
-                                valueFinalObject = valueObject
-                            }
-                        }
-                        else 
-                        {
-                            valueFinalObject = valueObject
-                        }
-
-
-                        //console.log
-                        //    (keyObject.toUpperCase())
-                
-                        //console.log
-                        //    (valueFinalObject)
-                
-
-                        d3.select
-                                ('#metadata-sample')
-                          .append
-                                ('h6')
-                          .text
-                                (`${keyObject.toUpperCase()}: ${valueFinalObject}`);
-                    }
-            );
-
-};
-
-
-/****************************************************************************
- *
- *  Function Name:   GenerateGaugeChartFunction
- *
- *  Function Description:  
- *      This function generates the Dashboard's gauge chart
- *      for the current sample.
- *
- *
- *  Function Parameters:
- *
- *  Type    Name            Description
- *  -----   -------------   ----------------------------------------------
- *  String
- *          currentIDString
- *                          This parameter is the ID for the current sample.
- *
- * 
- *  Date        Description                             Programmer
- *  --------    ------------------------------------    ------------------
- *  10/06/23    Initial Development                     N. James George
- *
- ****************************************************************************/
-
-function GenerateGaugeChartFunction 
-            (currentIDString) 
-{
- 
-    let gaugeChartDataObject
-            = samplesDataGlobalJsonDictionaryList
-                .metadata
-                .find
-                    (results => results.id == currentIDString);
-
-    let washingFrequencyInteger
-            = gaugeChartDataObject.wfreq
-
-    let gaugeChartTraceDictionaryList
-            = [
-                {
-                    type: 'indicator',
-                    mode: 'gauge+number',
-                    value: washingFrequencyInteger,
-                    title: {text: '<b>Belly Button Washing Frequency</b>' 
-                                  + '<br> Scrubs Per Week',
-                            font: {size: 28}},
-                    domain: {x: [0, 1], y: [0, 1]},
-                    gauge: {axis: {range: [null, 9], 
-                                   tickwidth: 2.0, 
-                                   tickcolor: 'black'},
-                            bar: {color: 'blue'},
-                            bgcolor: 'white',
-                            borderwidth: 1.0,
-                            bordercolor: 'black',
-                            steps: [{range: [0, 2], color: '6e78ff'},
-                                    {range: [2, 4], color: '6c8dfa'},
-                                    {range: [4, 5], color: '6aa1f4'},
-                                    {range: [5, 6], color: '68b6ef'},
-                                    {range: [6, 7], color: '65cbe9'},
-                                    {range: [7, 8], color: '63dfe4'},
-                                    {range: [8, 9], color: '61f4de'}],
-                            threshold: {line: {color: 'indigo', 
-                                               width: 4.0},
-                                        thickness: 1.0,
-                                        value: 9}}
-                }
-              ];
-    
-  
-    let gaugeChartLayoutDictionary  
-            = {width: 445, 
-               height: 450, 
-               font: {color: 'black', 
-                      family: 'Garamond', 
-                      size: 20.0},
-               paper_bgcolor: 'lavender'};
-    
-
-    //console.log
-    //    (currentIDString)
-       
-    //console.log
-    //    (gaugeChartDataObject)
-       
-    //console.log
-    //    (washingFrequencyInteger)
-
-    //console.log
-    //    (gaugeChartTraceDictionaryList)
-
-    //console.log
-    //    (gaugeChartLayoutDictionary)              
-    
-
-    Plotly.newPlot
-        ('gauge', 
-         gaugeChartTraceDictionaryList, 
-         gaugeChartLayoutDictionary);
-
-} // This right brace ends the block for the function, GenerateGaugeChartFunction.
+}; // This right brace ends the block for the subroutine, 
+// InitializeWebPageSubroutine.
 
 
 // This line of code calls the initialize function for the Microbial Diversity Dashboard.
-InitializeWebPageFunction();
+InitializeWebPageSubroutine();

@@ -1,0 +1,142 @@
+/*******************************************************************************************
+ #
+ #  File Name:  microbialDiversityDashboardStyle.css
+ #
+ #  File Description:
+ #      This css file, style.css, contains the css code for the Microbial Diversity
+ #      Dashboard.
+ #
+ #
+ #  Date            Description                             Programmer
+ #  ----------      ------------------------------------    ------------------
+ #  11/10/2023      Initial Development                     N. James George
+ #
+ #******************************************************************************************/
+
+.jumbotron
+{
+    background: none;
+    color: black;
+    font-family: 'Georgia';
+    font-size: 42px;
+    font-weight: bold;
+    height: 12vw;
+    width: 40vw;
+    padding: 75px;
+}
+
+.topnav 
+{
+    align-items: center;
+    background-color: #DFF0F9;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.topnav a 
+{
+    border-top: 7px solid transparent;
+    color: black;
+    display: inline-block;
+    font-family: 'Georgia';
+    font-size: 16px;
+    margin: 0 20px;
+    text-align: center;
+    padding: 0;
+}
+  
+.topnav a:hover 
+{
+    border-top: 7px solid firebrick;
+    color: firebrick;
+}
+
+.nav-item
+{
+    align-items: center;
+    height: 40px;
+}
+
+.nav-item-btn
+{
+    border-top: 7px solid transparent;
+    border-bottom: 3px solid transparent;
+}
+
+.top_panel 
+{
+    background-color: #DFF0F9;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.padding_distance {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.dropdown_header
+{
+    border-bottom: 5px solid firebrick;
+    color: firebrick;
+    font-family: 'Georgia';
+    font-size: 18px;
+    font-weight: bold;
+    height: 30px;
+    width: 230px;
+    text-align: center;
+}
+
+.dropdown_menu
+{
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    cursor: pointer; 
+    font-family: 'Georgia';
+    height: 30px;
+    width: 230px;
+    text-align: center;
+}
+
+.panel 
+{
+    padding-top: 25px;
+}
+
+.panel-heading
+{
+    background-color: firebrick;
+    border: 2px solid black;
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom: 0px solid;
+    text-align: center;
+}
+
+.panel-title
+{
+    background-color: firebrick;
+    color: white;
+    display: inline-block;
+    font-family: 'Georgia';
+    font-size: 16px;
+    font-weight: bold;
+    height: 16px;
+}
+
+.panel-body
+{
+    background: white;
+    border: 2px solid black;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    font-family: 'Georgia';
+    font-size: 14px;
+    margin: 0 auto;
+    padding: 10px 10px 10px 10px;
+    width: 230px;
+}
